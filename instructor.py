@@ -57,4 +57,8 @@ def llamar(text:dict):
 
     return chat_completion.choices[0].message.content
 
-print(llamar({'skills':'', 'rol':'front-end developer'}))
+
+def generar_ruta_lista(text:dict):
+    """Convierte la ruta generada en texto a una estructura de datos."""
+    respuesta = llamar(text)
+    return eval(respuesta)
