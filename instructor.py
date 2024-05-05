@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 client = Groq()
-def llamar(text):
+def llamar(text:dict):
     chat_completion = client.chat.completions.create(
         #
         # Required parameters
@@ -14,12 +14,14 @@ def llamar(text):
             # how it should behave throughout the conversation.
             {
                 "role": "system",
-                "content": "dadas estas skills y el rol deseado dame una ruta de aprendizaje con el siguiente formato en una lista de python[{'tema':'tema1', 'estudiado': False},{'tema':'tema2', 'estudiado': False}]ordenalas en orden de aprendizaje recomendadomarca como true las habilidades que ya tenga, recuerda generar todas las respuestas en español, ademas recueda solo generar la lista"
+                "content": "Dadas estas  skills y este rol deseado, genera una ruta de aprendizaje personalizada teniendo en cuenta las skills y rol deseado con el siguiente formato en una lista de Python [{'tema':'tema1', 'estudiado': False},{'tema':'tema2', 'estudiado': False}] ordenalas en orden de aprendizaje recomendado marca como true las habilidades que ya tenga el usuario, regenera todas las respuestas en español y no uses ningun otro idioma, solo genera la lista y no de mas información. si no hay ninguna skill genera la ruta ma viable para la formacion academica "
             },
             # Set a user message for the assistant to respond to.
             {
                 "role": "user",
-                "content": f"{text}",
+                "content": f"Skills: {text['skills']}. Rol deseado: {text['rol']}"
+
+                
             }
         ],
 
@@ -33,7 +35,7 @@ def llamar(text):
         # Controls randomness: lowering results in less random completions.
         # As the temperature approaches zero, the model will become deterministic
         # and repetitive.
-        temperature=0.5,
+        temperature=0.01,
 
         # The maximum number of tokens to generate. Requests can use up to
         # 32,768 tokens shared between prompt and completion.
@@ -54,3 +56,5 @@ def llamar(text):
     )
 
     return chat_completion.choices[0].message.content
+
+print(llamar({'skills':'', 'rol':'front-end developer'}))
